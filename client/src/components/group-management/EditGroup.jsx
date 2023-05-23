@@ -10,11 +10,16 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
+import AddIcon from "@mui/icons-material/Add";
+import UpdateIcon from "@mui/icons-material/Update";
 import React, { useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { useLocation } from "react-router-dom";
 import { updateGroupMembers } from "../../api/api";
 import SupervisorNavbar from "../Navbar/SupervisorNavbar";
+
 function EditGroup(props) {
   const location = useLocation();
   const [modGName, setModGName] = useState(location.state.name);
@@ -24,15 +29,19 @@ function EditGroup(props) {
   const [totalNum, setTotalNum] = useState();
   const [fieldNumber, setFieldNumber] = useState(0);
   const [actualList, setActualList] = useState();
+
   useEffect(() => {
     setTotalNum(modMembers.length + fieldNumber);
   }, [fieldNumber, modMembers]);
+
   const handleGroupLeader = (e) => {
     setModGroupLeader(e.target.value);
   };
+
   const handleAddField = () => {
     setFieldNumber(fieldNumber + 1);
   };
+
   const handleRemoveField = (remValue) => {
     const modded = modMembers.filter((value) => {
       if (value._id !== remValue) {
@@ -46,6 +55,7 @@ function EditGroup(props) {
   const handleRemoveField2 = () => {
     setFieldNumber(fieldNumber - 1);
   };
+
   const handleModInputFieldChange = (i, value) => {
     let arr = [...fieldList];
     arr[i] = value;
@@ -61,6 +71,7 @@ function EditGroup(props) {
     });
     setActualList(arr2);
   };
+
   useEffect(() => {
     const update = async () => {
       if (actualList) {
@@ -75,21 +86,30 @@ function EditGroup(props) {
     };
     update();
   }, [actualList]);
+
   return (
-    <div>
-      {console.log(modGroupLeader)}
-      <SupervisorNavbar />
-      <div style={{ backgroundColor: "#0b2b40", height: "100vh" }}>
+    <div style={{ display: "flex", height: "100vh" }}>
+      <div style={{ width: "20%", backgroundColor: "#28282B" }}>
+        <SupervisorNavbar />
+      </div>
+      <div
+        style={{
+          width: "80%",
+          backgroundColor: "lightgrey",
+          height: "100vh",
+        }}
+      >
         <div
           style={{
             display: "flex",
             justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
+            width: "100%",
+            margin: "20px",
+            backgroundColor:"white"
           }}
         >
-          <div style={{ backgroundColor: "#81007f", padding: "50px" }}>
-            <FormControl component="fieldset">
+          <div style={{backgroundColor:"white", width: "100vw" }}>
+            <FormControl component="fieldset" style={{width:"78vw"}}>
               <RadioGroup
                 onChange={handleGroupLeader}
                 defaultValue={location.state.groupLeader}
@@ -97,24 +117,23 @@ function EditGroup(props) {
                 <TextField
                   id="mgroup-name"
                   variant="filled"
-                  label="Group Name"
                   value={modGName}
                   onChange={(e) => {
                     setModGName(e.target.value);
                   }}
                   InputProps={{
-                    style: { color: "white" },
+                    style: { color: "black" },
                   }}
                   InputLabelProps={{
-                    style: { color: "white" },
+                    style: { color: "black" },
                   }}
                 ></TextField>
-                <Table>
+                <Table >
                   <TableHead>
-                    <TableRow>
+                    <TableRow >
                       <TableCell
                         style={{
-                          color: "white",
+                          color: "black",
                           fontWeight: "bold",
                           fontSize: 16,
                         }}
@@ -123,7 +142,7 @@ function EditGroup(props) {
                       </TableCell>
                       <TableCell
                         style={{
-                          color: "white",
+                          color: "black",
                           fontWeight: "bold",
                           fontSize: 16,
                         }}
@@ -132,7 +151,7 @@ function EditGroup(props) {
                       </TableCell>
                       <TableCell
                         style={{
-                          color: "white",
+                          color: "black",
                           fontWeight: "bold",
                           fontSize: 16,
                         }}
@@ -143,147 +162,117 @@ function EditGroup(props) {
                   </TableHead>
                   <TableBody>
                     {modMembers &&
-                      Array.from({ length: modMembers.length }, (_, i) => {
-                        return (
-                          <TableRow key={"key" + i}>
-                            <TableCell
-                              key={"key" + i}
-                              style={{ color: "white" }}
-                            >
-                              {modMembers[i].email}
-                            </TableCell>
-                            <TableCell>
-                              <Button
-                                key={"Button" + i}
-                                style={{
-                                  backgroundColor: "red",
-                                  color: "white",
-                                  borderRadius: 10,
-                                }}
-                                onMouseEnter={(e) => {
-                                  e.target.style.backgroundColor = "white";
-                                  e.target.style.color = "red";
-                                }}
-                                onMouseLeave={(e) => {
-                                  e.target.style.backgroundColor = "red";
-                                  e.target.style.color = "white";
-                                }}
-                                onClick={() => {
-                                  handleRemoveField(modMembers[i]._id);
-                                }}
-                              >
-                                Delete
-                              </Button>
-                            </TableCell>
-                            <TableCell>
-                              <FormControlLabel
-                                key={"rkey" + i}
-                                value={modMembers[i].email}
-                                control={<Radio />}
-                                label="Assign Group Leader"
-                                style={{ color: "white" }}
-                              />
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-
-                    {Array.from({ length: fieldNumber }, (_, i) => {
-                      return (
-                        <TableRow key={i.toString()}>
+                      modMembers.map((member, index) => (
+                        <TableRow key={index}>
+                          <TableCell style={{ color: "black" }}>
+                            {member.email}
+                          </TableCell>
                           <TableCell>
-                            <TextField
-                              key={i}
-                              id={i.toString()}
-                              variant="filled"
-                              label="Email Address of Student"
-                              onChange={(e) => {
-                                handleModInputFieldChange(i, e.target.value);
+                            <IconButton
+                              style={{
+                                color: "red",
+                                backgroundColor: "transparent",
                               }}
-                              InputProps={{
-                                style: { color: "white" },
+                              onClick={() => {
+                                handleRemoveField(member._id);
                               }}
-                              InputLabelProps={{
-                                style: { color: "white" },
-                              }}
-                            ></TextField>
+                              title="Delete"
+                            >
+                              <DeleteIcon />
+                            </IconButton>
                           </TableCell>
                           <TableCell>
                             <FormControlLabel
-                              value={fieldList[i]}
+                              value={member.email}
                               control={<Radio />}
-                              label="Assign Group Leader"
                             />
                           </TableCell>
                         </TableRow>
-                      );
-                    })}
+                      ))}
+                    {Array.from({ length: fieldNumber }, (_, i) => (
+                      <TableRow key={i.toString()}>
+                        <TableCell>
+                          <TextField
+                            key={i}
+                            id={i.toString()}
+                            variant="filled"
+                            onChange={(e) => {
+                              handleModInputFieldChange(i, e.target.value);
+                            }}
+                            InputProps={{
+                              style: { color: "black" ,backgroundColor: "transparent"},
+                              
+                            }}
+                            InputLabelProps={{
+                              style: { color: "black" ,backgroundColor: "transparent" },
+                            }}
+                          ></TextField>
+                        </TableCell>
+                        <TableCell>
+                          <FormControlLabel
+                            value={fieldList[i]}
+                            control={<Radio />}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))}
                   </TableBody>
                 </Table>
-                {totalNum < 3 && (
-                  <Button
+
+                <div style={{ display: "flex" }}>
+                  {totalNum < 3 && (
+                    <IconButton
+                      style={{
+                        backgroundColor: "transparent",
+                        color: "inherit",
+                        border: "none",
+                        marginRight: "30px",
+                      }}
+                      onMouseEnter={(e) => {
+                        e.target.style.backgroundColor = "transparent";
+                        e.target.style.color = "green";
+                      }}
+                      onMouseLeave={(e) => {
+                        e.target.style.backgroundColor = "transparent";
+                        e.target.style.color = "inherit";
+                      }}
+                      onClick={handleAddField}
+                      title="Add Member"
+                    >
+                      <AddIcon />
+                    </IconButton>
+                  )}
+                  {fieldNumber > 0 && totalNum > 0 && (
+                    <IconButton
+                      style={{
+                        backgroundColor: "transparent",
+                        color: "inherit",
+                        border: "none",
+                        marginRight: "30px",
+                      }}
+                      
+                      onClick={() => {
+                        handleRemoveField2();
+                      }}
+                      title="Delete"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  )}
+                  <IconButton
+                    onClick={handleGroupUpdate}
                     style={{
-                      backgroundColor: "green",
-                      color: "white",
-                      borderRadius: 10,
-                      marginRight: "30px",
+                      backgroundColor: "transparent",
+                      color: "inherit",
+                      border: "none",
                     }}
-                    onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = "white";
-                      e.target.style.color = "green";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = "green";
-                      e.target.style.color = "white";
-                    }}
-                    onClick={handleAddField}
+                   
+                    title="Update"
                   >
-                    Add member
-                  </Button>
-                )}
-                {fieldNumber > 0 && totalNum > 0 && (
-                  <Button
-                    style={{
-                      backgroundColor: "red",
-                      color: "white",
-                      borderRadius: 10,
-                      marginRight: "30px",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.target.style.backgroundColor = "white";
-                      e.target.style.color = "red";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.target.style.backgroundColor = "red";
-                      e.target.style.color = "white";
-                    }}
-                    onClick={() => {
-                      handleRemoveField2();
-                    }}
-                  >
-                    Delete
-                  </Button>
-                )}
+                    <UpdateIcon />
+                  </IconButton>
+                </div>
               </RadioGroup>
-              <Button
-                onClick={handleGroupUpdate}
-                style={{
-                  backgroundColor: "black",
-                  color: "white",
-                  borderRadius: 10,
-                  marginRight: "30px",
-                }}
-                onMouseEnter={(e) => {
-                  e.target.style.backgroundColor = "white";
-                  e.target.style.color = "black";
-                }}
-                onMouseLeave={(e) => {
-                  e.target.style.backgroundColor = "black";
-                  e.target.style.color = "white";
-                }}
-              >
-                Update
-              </Button>
             </FormControl>
           </div>
         </div>

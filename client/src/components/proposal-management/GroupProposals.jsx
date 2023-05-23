@@ -9,7 +9,8 @@ import {
   TableRow,
   TextField,
 } from "@mui/material";
-
+import IconButton from "@mui/material/IconButton";
+import SendIcon from "@mui/icons-material/Send";
 import React, { useState } from "react";
 import { useContext, useEffect } from "react";
 import { ChatContext } from "../../context/ChatProvider";
@@ -21,6 +22,8 @@ import {
   unUpdateProposalStatus,
   // createNotification,
 } from "../../api/api";
+import { borderRadius } from "@mui/system";
+
 function GroupProposals(props) {
   const { user } = useContext(ChatContext);
   const [supervisorGroups, setSupervisorGroups] = useState();
@@ -42,9 +45,10 @@ function GroupProposals(props) {
 
   const handleRadio = (value, propoId) => {
     setExistingValue(value);
-    if (value == "Approved") setApprove(propoId);
-    if (value == "Disapproved") setUnApprove(propoId);
+    if (value === "Approved") setApprove(propoId);
+    if (value === "Disapproved") setUnApprove(propoId);
   };
+
   useEffect(() => {
     const unUpdateApproval = async () => {
       const response = await unUpdateProposalStatus(unApprovalProposal);
@@ -61,6 +65,7 @@ function GroupProposals(props) {
       unUpdateApproval();
     }
   }, [unApprovalProposal]);
+
   useEffect(() => {
     const updateApproval = async () => {
       const response = await updateProposalStatus(approvalProposal);
@@ -76,6 +81,7 @@ function GroupProposals(props) {
       updateApproval();
     }
   }, [approvalProposal]);
+
   useEffect(() => {
     const getGroups = async () => {
       const data = await getSupervisorGroups(user.id);
@@ -85,6 +91,7 @@ function GroupProposals(props) {
     };
     getGroups();
   }, [reRun]);
+
   useEffect(() => {
     if (supervisorGroups && supervisorProposals) {
       let data34 = supervisorGroups.group.map((group) => {
@@ -106,32 +113,42 @@ function GroupProposals(props) {
       setGroupProposals(data34);
     }
   }, [supervisorGroups, supervisorProposals]);
+
   return (
-    <Box>
-      {console.log(groupProposals)}
-      <div style={{ position: "fixed", top: 0, width: "100%", zIndex: 1 }}>
+    <Box display="flex">
+      <Box style={{ width: "20%", backgroundColor: "#28282B" }}>
+
         <SupervisorNavbar />
-      </div>
+
+      </Box>
 
       <Box
+        width="80%"
         style={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           height: "100vh",
-          backgroundColor: "#0b2b40",
-          flexDirection: "column",
+          backgroundColor: "lightgrey",
+          flexDirection: "row",
+
         }}
       >
         <Table
           style={{
             margin: "0 auto",
             border: "1px solid black",
-            backgroundColor: "#81007f",
-            width: "100vh",
+            backgroundColor: "white",
+            width: "90%",
+            border: "3px",
+            borderColor: "black", /* Border properties with black color */
+            borderRadius: "20px", /* Border radius */
+            boxShadow: "black",
+            hight:"100vh"
+
           }}
         >
-          <TableHead>
+          <TableHead style={{ backgroundColor: "#28282B" }}>
             <TableRow>
               <TableCell style={{ color: "white", fontWeight: "bold" }}>
                 Group Name
@@ -143,7 +160,7 @@ function GroupProposals(props) {
                 Status
               </TableCell>
               <TableCell style={{ color: "white", fontWeight: "bold" }}>
-                Add Comments
+                Remarks
               </TableCell>
             </TableRow>
           </TableHead>
@@ -151,7 +168,7 @@ function GroupProposals(props) {
             {groupProposals &&
               groupProposals.map((group, index) => (
                 <TableRow key={index}>
-                  <TableCell style={{ color: "white" }}>{group.name}</TableCell>
+                  <TableCell style={{ color: "black" }}>{group.name}</TableCell>
                   <TableCell>
                     {group.filepath ? (
                       <div>
@@ -160,86 +177,51 @@ function GroupProposals(props) {
                         </a>
                       </div>
                     ) : (
-                      <p>Proposal Pending</p>
+                      <p style={{ color: "red", paddingTop:"17px" }}>Pending</p>
+
                     )}
                   </TableCell>
                   <TableCell>
-                    {/* {group.proposalStatus === "Approved" && (
-                      <Button
-                        onClick={() => {
-                          setUnApprove(group.proposalId);
-                        }}
-                        style={{
-                          backgroundColor: "red",
-                          color: "white",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.target.style.backgroundColor = "white";
-                          e.target.style.color = "red";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.style.backgroundColor = "red";
-                          e.target.style.color = "white";
-                        }}
-                      >
-                        Disapprove
-                      </Button>
-                    )}
-                    {group.proposalStatus === "Pending" && (
-                      <Button
-                        onClick={() => {
-                          setApprove(group.proposalId);
-                        }}
-                        style={{
-                          backgroundColor: "green",
-                          color: "white",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.target.style.backgroundColor = "white";
-                          e.target.style.color = "green";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.target.style.backgroundColor = "green";
-                          e.target.style.color = "white";
-                        }}
-                      >
-                        Approve
-                      </Button>
-                    )} */}
-                    {group && group.proposalStatus && group.filepath != "" && (
+                    {group && group.proposalStatus && group.filepath !== "" && (
                       <div>
-                        <label>
-                          <input
-                            key={"radio1" + index}
-                            type="radio"
-                            value="Approved"
-                            checked={group.proposalStatus === "Approved"}
-                            onChange={(e) =>
-                              handleRadio(e.target.value, group.proposalId)
-                            }
-                          />
-                          Approve
-                        </label>
-                        <label>
-                          <input
-                            key={"radio2" + index}
-                            type="radio"
-                            value="Disapproved"
-                            checked={group.proposalStatus === "Disapproved"}
-                            onChange={(e) =>
-                              handleRadio(e.target.value, group.proposalId)
-                            }
-                          />
-                          Disapprove
-                        </label>
-                        {/* Render other radio buttons as needed */}
-                      </div>
+                      <label style={{ marginRight: "10px" }}>
+                        <input
+                          key={"radio1" + index}
+                          type="radio"
+                          value="Approved"
+                          checked={group.proposalStatus === "Approved"}
+                          onChange={(e) => handleRadio(e.target.value, group.proposalId)}
+                          style={{ marginRight: "5px", transform: "scale(1.5)" }}
+                        />
+                        Approve
+                      </label>
+                      <label style={{ marginRight: "10px" }}>
+                        <input
+                          key={"radio2" + index}
+                          type="radio"
+                          value="Disapproved"
+                          checked={group.proposalStatus === "Disapproved"}
+                          onChange={(e) => handleRadio(e.target.value, group.proposalId)}
+                          style={{ marginRight: "5px", transform: "scale(1.5)" }}
+                        />
+                        Disapprove
+                      </label>
+                      {/* Render other radio buttons as needed */}
+                    </div>
+                    
                     )}
                   </TableCell>
-                  {group && group.proposalStatus && group.filepath != "" && (
+                  {group && group.proposalStatus && group.filepath !== "" && (
                     <TableCell>
-                      <TextField key={"comment" + index} />
-                      <Button key={"buttoncomment" + index}>Send</Button>
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <TextField key={"comment" + index} />
+                        <Button key={"buttoncomment" + index}>
+                          <IconButton title="Send" >
+                            <SendIcon />
+                          </IconButton>
+                        </Button>
+                      </div>
+
                     </TableCell>
                   )}
                 </TableRow>

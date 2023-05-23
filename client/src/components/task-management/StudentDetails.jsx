@@ -39,32 +39,35 @@ function StudentDetails(props) {
   }, [location.state._id, user.id]);
 
   return (
-    <Box display="flex" height="100vh">
+    <Box display="flex" backgroundColor="lightgrey" >
     <Box style={{ width: "20%", backgroundColor: "#28282B" }}>
       <SupervisorNavbar />
     </Box>
   
-    <Box sx={{ bgcolor: "lightgrey", padding: "20px", marginBottom: "10px", width: "80%", height: "100%" }}>
-      <Box sx={{ marginBottom: "20px", bgcolor:"white" }}>
-        <Typography variant="h6" sx={{ color: "white",textAlign: "center", bgcolor: "green", padding: "5px", borderRadius: "4px" }}>
+    <Box sx={{ bgcolor: "lightgrey", padding: "20px", marginBottom: "10px", width: "80%", height: "100%", borderRadius: "20px" ,}}>
+      <Box sx={{ marginBottom: "20px", bgcolor:"white", padding:"20px" ,boxShadow: "0 2px 4px green",borderRadius: "10px"}}>
+        <Typography variant="h4" sx={{ color: "white",textAlign: "center", bgcolor: "green", padding: "5px", borderRadius: "10px",padding:"10px" }}>
           Completed Tasks
         </Typography>
   
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Title</TableCell>
-              <TableCell align="center">Date</TableCell>
-              <TableCell align="center">Time</TableCell>
-              <TableCell>Action</TableCell>
+              <TableCell sx={{fontSize: "15px",
+                    fontWeight: "bold",}} >Title</TableCell>
+              <TableCell align="center" sx={{fontSize: "15px",
+                    fontWeight: "bold",}} >Due</TableCell>
+              
+              <TableCell  sx={{fontSize: "15px",
+                    fontWeight: "bold",}} >Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {completedTasks.map((task, index) => (
               <TableRow key={index}>
                 <TableCell>{task.title}</TableCell>
-                <TableCell align="center">{formatDate2(task.deadline)}</TableCell>
-                <TableCell align="center">{formatTimeAMPM2(task.deadline)}</TableCell>
+                <TableCell align="center">{formatDate2(task.deadline)},{formatTimeAMPM2(task.deadline)}</TableCell>
+                
                 <TableCell>
                 <VisibilityIcon
                   onClick={() => handleNavigateToStudentTask(task)}
@@ -85,26 +88,28 @@ function StudentDetails(props) {
         </Table>
       </Box>
   
-      <Box sx={{ marginBottom: "20px",bgcolor:"white" }}>
-        <Typography variant="h6" sx={{ color: "white",textAlign: "center" ,bgcolor: "#FF0000", padding: "5px", borderRadius: "4px" }}>
+      <Box sx={{ marginBottom: "20px",bgcolor:"white", padding:"20px",boxShadow: "0 2px 4px red",borderRadius: "10px" }}>
+        <Typography variant="h4" sx={{ color: "white",textAlign: "center" ,bgcolor: "#FF0000", padding: "5px", borderRadius: "10px" }}>
           Pending Tasks
         </Typography>
   
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Title</TableCell>
-              <TableCell align="center">Date</TableCell>
-              <TableCell align="center">Time</TableCell>
-              <TableCell>Action</TableCell>
+              <TableCell sx={{fontSize: "15px",
+                    fontWeight: "bold",}}>Title</TableCell>
+              <TableCell align="center" sx={{fontSize: "15px",
+                    fontWeight: "bold",}} >Due</TableCell>
+              
+              <TableCell sx={{fontSize: "15px",
+                    fontWeight: "bold",}}>Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {pendingTasks.map((task, index) => (
               <TableRow key={index}>
                 <TableCell>{task.title}</TableCell>
-                <TableCell align="center">{formatDate2(task.deadline)}</TableCell>
-                <TableCell align="center">{formatTimeAMPM2(task.deadline)}</TableCell>
+                <TableCell align="center">{formatDate2(task.deadline)},{formatTimeAMPM2(task.deadline)}</TableCell>
                 <TableCell>
                 <VisibilityIcon
                   onClick={() => handleNavigateToStudentTask(task)}
@@ -125,18 +130,21 @@ function StudentDetails(props) {
         </Table>
       </Box>
   
-      <Box sx={{bgcolor:"white"}} >
-        <Typography variant="h6" sx={{ color: "white",textAlign: "center", bgcolor: "#FF0000", padding: "5px", borderRadius: "4px" }}>
+      <Box sx={{bgcolor:"white", padding:"20px", marginBottom:"30px",boxShadow: "0 2px 4px red",borderRadius: "10px"}} >
+        <Typography variant="h4" sx={{ color: "white",textAlign: "center", bgcolor: "#FF0000", padding: "5px", borderRadius: "10px" }}>
           Unapproved Tasks
         </Typography>
   
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Title</TableCell>
-              <TableCell align="center">Date</TableCell>
-              <TableCell align="center">Time</TableCell>
-              <TableCell>Action</TableCell>
+              <TableCell sx={{fontSize: "15px",
+                    fontWeight: "bold",}}>Title</TableCell>
+              <TableCell sx={{fontSize: "15px",
+                    fontWeight: "bold",}} align="center">Due</TableCell>
+              
+              <TableCell sx={{fontSize: "15px",
+                    fontWeight: "bold",}} >Action</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
