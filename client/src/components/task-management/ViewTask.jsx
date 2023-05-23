@@ -78,80 +78,97 @@ function ViewTask(props) {
   return (
 
 
-<Box sx={{ display: "flex", height: "100vh" }}>
-    <Box sx={{ width: "20vw", backgroundColor: "#28282B" }}>
-      <NavBar  />
+    <Box sx={{ display: "flex", height: "100vh",bgcolor:"lightgrey" }}>
+    <Box sx={{ width: "20%", backgroundColor: "#28282B" }}>
+      <NavBar />
     </Box>
-      <Box
-        sx={{
-          bgcolor: "#6A0572",
-          color: "white",
+    <Box
+      sx={{
+        
+        color: "black",
+        padding: "20px",
+        width: "80%",
+        width: { xs: "100%", sm: "100%", md: "100%", lg: "100%" },
+        margin: "20px auto",
+        marginBottom: "10px",
+        maxWidth: { xs: "100%", sm: "90%", md: "70%", lg: "50%" },
+      }}
+    >
+      <div style={{
+          gcolor: "white",
+            color: "black",
+            padding: "20px",
+            width: "50%",
+            margin: "auto",
+            marginTop: "20%",
+            boxShadow: "0 2px 4px #052f72",
+            borderRadius:"10px",
+            justifyContent:'center',
+            alignItems:"center",
+            textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
           padding: "20px",
-          width:"80vw",
-          width: { xs: "100%", sm: "100%", md: "100%", lg: "100%" },
-          margin: "20px auto",
-          marginBottom: "10px",
-          maxWidth: { xs: "100%", sm: "90%", md: "70%", lg: "50%" },
-        }}
-      >
-        <Typography variant="h6">Title</Typography>
-        <Typography>{location.state.title}</Typography>
-        <Typography variant="h6">Description</Typography>
-        <Typography>{location.state.description}</Typography>
-        <Typography variant="h6">Due Date</Typography>
-        <Typography>Date: {formatDate2(location.state.deadline)}</Typography>
-        <Typography>
-          Time: {formatTimeAMPM2(location.state.deadline)}
-        </Typography>
-        {user.type === "Student" && tasks && tasks.taskStatus === "Pending" && (
-          <Box>
-            {" "}
-            <label htmlFor="fileInput">Upload</label>
-            <form method="post" encType="multipart/form-data">
-              <input
-                type="file"
-                name="files"
-                multiple
-                style={{ display: "none" }}
-                id="fileInput"
-                onChange={(e) => onFileChange(e)}
-              />
-            </form>
-          </Box>
-        )}
-        {user.type === "Student" && tasks && tasks.taskStatus === "Pending" && (
-          <Button onClick={handleUploadTask}>Submit Task</Button>
-        )}{" "}
-        {user.type === "Student" &&
-          tasks &&
-          tasks.taskStatus === "Completed" && (
-            <Button onClick={handleUnUploadTask}>Unsubmit Task</Button>
-          )}
+          borderRadius: "10px",
+          backgroundColor:"white",
+        }}>
+      <Typography style={{fontSize:40,fontWeight:'bold'}}> "{location.state.title}" </Typography>
+      <Typography variant="h6">Description: {location.state.description}</Typography>
+      
+     
+      <Typography>Due: {formatDate2(location.state.deadline)},{formatTimeAMPM2(location.state.deadline)}</Typography>
+      
+      {user.type === "Student" && tasks && tasks.taskStatus === "Pending" && (
         <Box>
-          {tasks &&
-            tasks.filespaths.length !== 0 &&
-            tasks.filespaths.map((task, index) => {
-              return (
-                <Box>
-                  <Link href={task} target="_blank" rel="noopener" key={index}>
-                    {task.split("--").pop()}
-                  </Link>
-                  {tasks.taskStatus === "Pending" && (
-                    <Button
-                      key={"remove file" + index}
-                      onClick={() => {
-                        handleRemoveFile(tasks._id, task);
-                      }}
-                    >
-                      Delete
-                    </Button>
-                  )}
-                </Box>
-              );
-            })}
+          <label htmlFor="fileInput">Upload</label>
+          <form method="post" encType="multipart/form-data">
+            <input
+              type="file"
+              name="files"
+              multiple
+              style={{ display: "none" }}
+              id="fileInput"
+              onChange={(e) => onFileChange(e)}
+            />
+          </form>
         </Box>
+      )}
+      {user.type === "Student" && tasks && tasks.taskStatus === "Pending" && (
+        <Button onClick={handleUploadTask}>Submit Task</Button>
+      )}
+      {user.type === "Student" &&
+        tasks &&
+        tasks.taskStatus === "Completed" && (
+          <Button onClick={handleUnUploadTask}>Unsubmit Task</Button>
+        )}
+      <Box>
+        {tasks &&
+          tasks.filespaths.length !== 0 &&
+          tasks.filespaths.map((task, index) => {
+            return (
+              <Box key={index}>
+                <Link href={task} target="_blank" rel="noopener">
+                  {task.split("--").pop()}
+                </Link>
+                {tasks.taskStatus === "Pending" && (
+                  <Button
+                    key={"remove file" + index}
+                    onClick={() => {
+                      handleRemoveFile(tasks._id, task);
+                    }}
+                  >
+                    Delete
+                  </Button>
+                )}
+              </Box>
+            );
+          })}
       </Box>
+      </div>
     </Box>
+  </Box>
   );
 }
 

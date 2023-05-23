@@ -94,7 +94,7 @@ function SupEvaViewTask(props) {
             })}
           {supEvaTask &&
             supEvaTask.taskStatus === "Completed" &&
-            supEvaTask.filespaths.length !== 0 &&
+           
             user.type === "Supervisor" && (
               <div>
                 <label>

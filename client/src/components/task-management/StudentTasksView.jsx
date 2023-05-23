@@ -1,4 +1,4 @@
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, Modal } from "@mui/material";
 import React, { useEffect, useContext, useState } from "react";
 import { ChatContext } from "../../context/ChatProvider";
 import {
@@ -20,10 +20,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 function StudentTasksView(props) {
   const { user } = useContext(ChatContext);
   const [studentTasks, setStudentTasks] = useState();
+  const [selectedTask, setSelectedTask] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
   const navigate = useNavigate();
 
   const handleTaskViewRoute = (task) => {
-    navigate("/view-task", { state: task });
+    setSelectedTask(task);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
   };
 
   useEffect(() => {
@@ -38,7 +45,7 @@ function StudentTasksView(props) {
   }, [navigate]);
 
   return (
-    <Box sx={{ display: "flex", height: "100vh" }}>
+    <Box sx={{ display: "flex", height: "100vh", background: "lightgrey" }}>
       <Box sx={{ width: "20%", backgroundColor: "#28282B" }}>
         <NavBar />
       </Box>
@@ -49,19 +56,19 @@ function StudentTasksView(props) {
           alignItems: "center",
           justifyContent: "center",
           width: "80%",
-          marginLeft:"20px",
-          marginRight:"20px",
+          marginLeft: "20px",
+          marginRight: "20px",
         }}
       >
+        {/* Completed Tasks */}
         <Box
           sx={{
             bgcolor: "white",
-            
             padding: "20px",
             width: "100%",
             margin: "20px auto",
             marginBottom: "20px",
-            borderRadius:"10px",
+            borderRadius: "10px",
             boxShadow: "0 2px 4px green",
           }}
         >
@@ -70,10 +77,10 @@ function StudentTasksView(props) {
               textAlign: "center",
               marginBottom: "10px",
               fontFamily: "bold",
-              color:"white",
-              bgcolor:"green",
-              borderRadius:"10px",
-              padding:"5px"
+              color: "white",
+              bgcolor: "green",
+              borderRadius: "10px",
+              padding: "5px",
             }}
             variant="h4"
           >
@@ -86,8 +93,7 @@ function StudentTasksView(props) {
                 <TableCell
                   sx={{
                     fontSize: "15px",
-                    fontWeight: "Bold",
-                    
+                    fontWeight: "bold",
                   }}
                 >
                   Title
@@ -95,8 +101,7 @@ function StudentTasksView(props) {
                 <TableCell
                   sx={{
                     fontSize: "15px",
-                    fontWeight: "Bold",
-                   
+                    fontWeight: "bold",
                   }}
                   align="center"
                 >
@@ -105,22 +110,21 @@ function StudentTasksView(props) {
                 <TableCell
                   sx={{
                     fontSize: "15px",
-                    fontWeight: "Bold",
-                    
-                  }}
-                >
-                  Action
-                </TableCell>
-                <TableCell
-                  sx={{
-                    fontSize: "15px",
-                    fontWeight: "Bold",
-                    
+                    fontWeight: "bold",
                   }}
                 >
                   Approval Status
                 </TableCell>
-              </TableRow>
+
+                <TableCell
+                  sx={{
+                    fontSize: "15px",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Action
+                </TableCell>
+                            </TableRow>
             </TableHead>
             <TableBody>
               {studentTasks &&
@@ -128,24 +132,21 @@ function StudentTasksView(props) {
                   if (value.taskStatus === "Completed") {
                     return (
                       <TableRow key={index}>
-                        <TableCell sx={{  }}>
-                          {value.title}
-                        </TableCell>
-                        <TableCell sx={{  }} align="center">
+                        <TableCell>{value.title}</TableCell>
+                        <TableCell align="center">
                           Due: {formatDate2(value.deadline)},{" "}
                           {formatTimeAMPM2(value.deadline)}
                         </TableCell>
+                        <TableCell>{value.taskApproval}</TableCell>
                         <TableCell>
                           <IconButton
-                            sx={{ }}
                             onClick={() => handleTaskViewRoute(value)}
+                            title="view"
                           >
-                            <VisibilityIcon />
+                            <VisibilityIcon  />
                           </IconButton>
                         </TableCell>
-                        <TableCell sx={{  }}>
-                          {value.taskApproval}
-                        </TableCell>
+                        
                       </TableRow>
                     );
                   }
@@ -154,6 +155,7 @@ function StudentTasksView(props) {
           </Table>
         </Box>
 
+        {/* Pending Tasks */}
         <Box
           sx={{
             bgcolor: "white",
@@ -163,7 +165,7 @@ function StudentTasksView(props) {
             margin: "auto",
             marginTop: "20px",
             boxShadow: "0 2px 4px red",
-            borderRadius:"10px",
+            borderRadius: "10px",
           }}
         >
           <Typography
@@ -171,7 +173,9 @@ function StudentTasksView(props) {
               textAlign: "center",
               marginBottom: "10px",
               fontFamily: "bold",
-              color:"red"
+              color: "white",
+              bgcolor: " #FF0000",
+              borderRadius: "10px",
             }}
             variant="h4"
           >
@@ -184,8 +188,7 @@ function StudentTasksView(props) {
                 <TableCell
                   sx={{
                     fontSize: "15px",
-                    fontWeight: "Bold",
-                    
+                    fontWeight: "bold",
                   }}
                 >
                   Title
@@ -194,9 +197,8 @@ function StudentTasksView(props) {
                   align="center"
                   sx={{
                     fontSize: "15px",
-                    fontWeight: "Bold",
+                    fontWeight: "bold",
                     paddingLeft: "120px",
-                  
                   }}
                 >
                   Due Date
@@ -204,8 +206,7 @@ function StudentTasksView(props) {
                 <TableCell
                   sx={{
                     fontSize: "15px",
-                    fontWeight: "Bold",
-                    
+                    fontWeight: "bold",
                   }}
                 >
                   Action
@@ -219,21 +220,16 @@ function StudentTasksView(props) {
                     return (
                       <TableRow key={index}>
                         <TableCell>
-                          <Typography sx={{  }} variant="bold">
-                            {value.title}
-                          </Typography>
+                          <Typography variant="bold">{value.title}</Typography>
                         </TableCell>
-                        <TableCell
-                          sx={{ paddingLeft: "120px" }}
-                          align="center"
-                        >
+                        <TableCell sx={{ paddingLeft: "120px" }} align="center">
                           Due: {formatDate2(value.deadline)},{" "}
                           {formatTimeAMPM2(value.deadline)}
                         </TableCell>
                         <TableCell>
                           <IconButton
-                            sx={{  }}
                             onClick={() => handleTaskViewRoute(value)}
+                            title="view"
                           >
                             <VisibilityIcon />
                           </IconButton>
@@ -246,6 +242,43 @@ function StudentTasksView(props) {
           </Table>
         </Box>
       </Box>
+
+      {/* Modal */}
+      <Modal
+        open={openModal}
+        onClose={handleCloseModal}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            bgcolor: "white",
+            border: "2px solid #000",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: "10px",
+          }}
+        >
+          <Typography id="modal-title" variant="h6" component="h2">
+            Task Details
+          </Typography>
+          {selectedTask && (
+            <div id="modal-description">
+              <Typography>Title: {selectedTask.title}</Typography>
+              <Typography>Due Date: {formatDate2(selectedTask.deadline)}</Typography>
+              <Typography>
+                Due Time: {formatTimeAMPM2(selectedTask.deadline)}
+              </Typography>
+              {/* Add more details here */}
+            </div>
+          )}
+          <Button onClick={handleCloseModal}>Close</Button>
+        </Box>
+      </Modal>
     </Box>
   );
 }

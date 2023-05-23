@@ -9,6 +9,8 @@ import {
   removeProposal,
 } from "../../api/api";
 import { ChatContext } from "../../context/ChatProvider";
+import FileUploadIcon from '@mui/icons-material/FileUpload';
+import CancelIcon from '@mui/icons-material/Cancel';
 import { Box, Button, Link } from "@mui/material";
 function Submission(props) {
   const [proposal, setProposal] = useState();
@@ -99,23 +101,31 @@ function Submission(props) {
       <NavBar  />
     </Box>
 
-    <div style={{ backgroundColor: "#0490db", minHeight: "100vh" , width: "80%",}}>
+    <div style={{ backgroundColor: "lightgray", minHeight: "100vh" , width: "80%",}}>
       
       <div
         style={{
-          backgroundColor: "#052f72",
-          width: "400px",
-          margin: "0 auto",
-          marginTop: "50px",
+          gcolor: "white",
+            color: "black",
+            padding: "20px",
+            width: "50%",
+            margin: "auto",
+            marginTop: "20%",
+            boxShadow: "0 2px 4px #28282B",
+            borderRadius:"10px",
+            justifyContent:'center',
+            alignItems:"center",
+            textAlign: "center",
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
           padding: "20px",
           borderRadius: "10px",
+          backgroundColor:"white",
         }}
       >
-        <h1 style={{ color: "white" }}>FYP Proposal</h1>
+        <h1 style={{ color: "Black", borderRadius:"5px" , width:"100%" }}>FYP Proposal</h1>
         <br />
         {proposalPath && (
           <Box>
@@ -127,7 +137,7 @@ function Submission(props) {
                 setIsRemove(true);
               }}
             >
-              Delete
+              <CancelIcon style={{color:'red'}}/>
             </Button>
           </Box>
         )}
@@ -150,6 +160,12 @@ function Submission(props) {
               borderRadius: "4px",
             }}
           >
+
+<FileUploadIcon
+                  style={{
+                    marginRight: "4px",
+                  }}
+                />
             Upload
           </label>
           <input
